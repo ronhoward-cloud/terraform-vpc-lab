@@ -1,9 +1,9 @@
 module "vpc" {
   source = "../../modules/vpc"
 
-  region              = "us-east-1"
-  az                  = "us-east-1a"
-  vpc_cidr            = "10.10.0.0/16"
-  public_subnet_cidr  = "10.10.1.0/24"
-  private_subnet_cidr = "10.10.2.0/24"
+  region              = var.region
+  az                  = var.az
+  vpc_cidr            = var.vpc_cidr
+  public_subnet_cidr  = var.public_subnet_cidr
+  private_subnet_cidr = var.private_subnet_cidr
 }
