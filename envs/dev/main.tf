@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+    bucket         = "ronhoward-terraform-state"
+    key            = "dev/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-state-locks"
+    encrypt        = true
+  }
+}
 module "vpc" {
   source = "../../modules/vpc"
 
