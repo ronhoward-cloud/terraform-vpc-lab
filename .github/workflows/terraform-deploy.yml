@@ -12,13 +12,16 @@ jobs:
   terraform:
     name: Terraform Plan and Apply
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project-5-cicd-pipeline
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init
