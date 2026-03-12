@@ -11,43 +11,68 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "ronhoward-terraform-state"
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "troubleshooting-vpc"
+  }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
 
   tags = {
-    Name = "terraform-state-bucket"
+    Name = "public-subnet"
   }
 }
 
-resource "aws_s3_bucket_versioning" "state_versioning" {
-  bucket = aws_s3_bucket.terraform_state.id
-
-  versioning_configuration {
-    status = "Enabled"
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-igw"
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "state_encryption" {
-  bucket = aws_s3_bucket.terraform_state.id
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
 
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-state-locks"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
+  route {
+    cidr_block      = "0.0.0.0/0"
+    gateway_id      = aws_internet_gateway.main.id
   }
 
   tags = {
-    Name = "terraform-state-lock-table"
+    Name = "public-rt"
   }
+}
+
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_security_group" "broken" {
+  name   = "broken-sg"
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "broken-security-group"
+  }
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-00484f27321fd29c9"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.broken.id]
+
+  tags = {
+    Name = "troubleshooting-instance"
+  }
+}
+
+output "instance_public_ip" {
+  value = aws_instance.web.public_ip
 }
