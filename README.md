@@ -1,44 +1,74 @@
-\# Terraform VPC Lab (Public + Private Subnets)
 
 
+# AWS Cloud Infrastructure Portfolio
+**Ron Howard II** | AWS Certified CloudOps Engineer | Terraform Specialist
 
-This lab provisions a basic AWS network using Terraform.
+This repository contains 5 hands-on AWS infrastructure projects built 
+with Terraform, demonstrating real-world cloud engineering skills.
 
+---
 
+## Project 1: Modular VPC Architecture
+**Skills:** Terraform modules, AWS networking, subnetting
 
-\## What it builds
+Built a production-ready VPC on AWS using reusable Terraform modules.
 
-\- VPC
+- Public and private subnets across availability zones
+- Internet Gateway, NAT Gateway, and route table associations
+- Security groups with least-privilege inbound/outbound rules
+- EC2 instance deployed for validation
 
-\- Public subnet
+---
 
-\- Private subnet
+## Project 2: Remote State Backend
+**Skills:** Terraform state management, S3, DynamoDB
 
-\- Internet Gateway
+Configured secure remote state storage for team-safe deployments.
 
-\- Route tables and associations
+- S3 bucket with versioning and encryption for state storage
+- DynamoDB table for state locking to prevent conflicts
+- Follows production best practices for collaborative Terraform workflows
 
-\- Security group
+---
 
-\- EC2 instance (validation)
+## Project 3: EC2 SSH Troubleshooting Lab
+**Skills:** AWS EC2, security groups, debugging
 
-\- Clean teardown with `terraform destroy`
+Diagnosed and resolved a real-world EC2 SSH connectivity failure.
 
+- Identified missing inbound rule on security group as root cause
+- Applied fix via Terraform and verified SSH access
+- Documented troubleshooting methodology
 
+---
 
-\## How to run
+## Project 4: IAM Hardening Lab
+**Skills:** AWS IAM, least-privilege access, security
 
-terraform init
+Implemented least-privilege IAM access control using Terraform.
 
-terraform validate
+- Created IAM user with custom S3 read-only policy
+- Enforced principle of least privilege
+- Validated permissions in AWS Console before teardown
 
-terraform plan
+---
 
-terraform apply
+## Project 5: CI/CD Pipeline with GitHub Actions
+**Skills:** GitHub Actions, CI/CD, automation, Terraform
 
+Built an automated infrastructure deployment pipeline.
 
+- Pipeline triggers on every push to main branch
+- Runs terraform init, plan, and apply automatically
+- AWS credentials managed securely via GitHub Secrets
+- Demonstrates DevOps automation for infrastructure deployments
 
-\## Teardown
+---
 
-terraform destroy
+## Certifications
+- AWS Certified CloudOps Engineer
+- AWS Certified Solutions Architect - Associate
+- AWS Certified Cloud Practitioner
 
+## Tech Stack
+AWS | Terraform | GitHub Actions | EC2 | VPC | S3 | IAM | DynamoDB
